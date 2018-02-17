@@ -51,8 +51,6 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        print(self.browser.page_source)
-
         # The page updates again, and now both items appear on the list
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
@@ -60,7 +58,7 @@ class NewVisitorTest(unittest.TestCase):
         # Eric wonders whether the site will remember his list and notices
         # the site has generated a unique URL for him - - there is some
         # explanatory text
-        print(self.browser.page_source)
+        self.fail('Finish the test!')
 
         # He visits the URL, and his todo list is still there
 
