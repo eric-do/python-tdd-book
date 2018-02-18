@@ -25,7 +25,7 @@ class NewVisitorTest(LiveServerTestCase):
                 return
             except (AssertionError, WebDriverException) as e:
                 if time.time() - start_time > MAX_WAIT:
-                    raise enter
+                    raise e
                 time.sleep(0.5)
 
     def test_can_start_a_list_for_one_user(self):
@@ -101,7 +101,7 @@ class NewVisitorTest(LiveServerTestCase):
         # Francis starts a new list by entering a new item
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
-        inputbox.send_keys(ENTER)
+        inputbox.send_keys(Keys.ENTER)
         self.wait_for_row_in_list_table('1: Buy milk')
 
         # Francis gets his own URL
@@ -115,3 +115,4 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Buy milk', page_text)
 
         # Satisfied, they both go back to sleep
+
