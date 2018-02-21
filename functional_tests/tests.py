@@ -1,12 +1,12 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import time
-from django.test import LiveServerTestCase
 
 MAX_WAIT = 10
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -32,29 +32,6 @@ class NewVisitorTest(LiveServerTestCase):
         # Eric has heard about a new todo app. 
         # He goes to its homepage
         self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        # He notices the input box is nicely centered
-        ## The horizontal start of the box + half the box width should be 
-        ## the center of the page (1024/2 = 512)
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta = 10
-        )
-
-        # He starts a new list and notices the input is nicely centered
-        # there too
-        inputbox.send_keys('testing')
-        inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta = 10
-        )
 
         # He notices the page title and header mention todo lists
         self.assertIn('To-Do', self.browser.title)
@@ -139,3 +116,30 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Satisfied, they both go back to sleep
 
+    def test_layout_and_styling(self):
+        # Eric has heard about a new todo app. 
+        # He goes to its homepage
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # He notices the input box is nicely centered
+        ## The horizontal start of the box + half the box width should be 
+        ## the center of the page (1024/2 = 512)
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta = 10
+        )
+
+        # He starts a new list and notices the input is nicely centered
+        # there too
+        inputbox.send_keys('testing')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table('1: testing')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width'] / 2,
+            512,
+            delta = 10
+        )
