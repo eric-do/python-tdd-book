@@ -3,6 +3,9 @@ from fabric.contrib.files import append, exists
 from fabric.api import cd, env, local, run
 
 REPO_URL = 'https://github.com/eric-do/python-tdd-book.git'
+env.user = 'ubuntu'
+env.key_filename = r'C:\Users\edo\.ssh\MyKeyPair.pem'
+env.hosts = 'ec2-52-37-23-227.us-west-2.compute.amazonaws.com'
 
 def deploy():
         site_folder = f'/home/{env.user}/sites/{env.host}'
@@ -21,6 +24,11 @@ def _get_latest_source():
         run(f'git clone {REPO_URL} .')
         current_commit = local("git log -n 1 --format=%H", capture=True)
         run(f'git reset --hard {current_commit}')
+
+def _update_virtualenv():
+    if not exists('virtualenv/bin/pip'):
+        run(f'python3.6 -m venv virtualenv')
+    run('./virtualenv/bin/pip install -r requirements.txt')
 
 def _create_or_update_dotenv():
     append('.env', 'DJANGO_DEBUG_FALSE=y')
